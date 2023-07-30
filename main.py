@@ -222,7 +222,6 @@ def run():
             print(f"密码:{password}")
             # Step 4 发送内容
             TypechoPublish.publish_to_typecho(dragged_file_name, url, username, password)
-            sys.exit()
         except NameError:
             print("请检查配置文件，确认相关信息是否正确，服务器是否能够正常访问，XML-PRC接口是否开启")
             sys.exit()
