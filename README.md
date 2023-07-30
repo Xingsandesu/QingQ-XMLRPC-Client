@@ -4,7 +4,7 @@
 
 ## 简介
 
-本项目使用 Typecho 的 XML-PRC 接口，实现本地 Markdown 文件解析，并且自动上传 Typecho 服务器，实现博客写作本地化与自动化
+本项目使用 Typecho 的 XML-RPC 接口，实现本地 Markdown 文件解析，并且自动上传 Typecho 服务器，实现博客写作本地化与自动化
 
 ## 功能列表
 
