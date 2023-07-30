@@ -187,8 +187,8 @@ categories:
 
 ## TODO LIST
 
-- hook 联动
-- Obsidian 插件联动
+- [x] hook 联动
+- [ ] Obsidian 插件联动
 
 ## 相关依赖
 
