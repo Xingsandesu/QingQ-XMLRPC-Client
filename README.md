@@ -190,6 +190,15 @@ categories:
 - [x] hook 联动
 - [ ] Obsidian 插件联动
 
+## 更新日志
+
+### 1.1-Server-Hook
+- 通过Hook实现获取自定义文件夹内如果有新的markdown文件被创建，程序会自动上传到Typecho
+- 提供企业微信消息推送支持，在config.yml中添加自己的企业微信信息，如果markdown文件被正确的上传，则会推送消息到您的企业微信程序中。
+- 添加了日志模块，由于是服务端部署模式，将不会使用input()来进行Windows窗口留存，相关所有的输出都会通过print.log保存，如有报错请看log
+- 更新了error.txt未知异常报错捕获逻辑
+- 提供Linux与Windows两种部署方式，获取请releases中下载
+
 ## 相关依赖
 
 
