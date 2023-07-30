@@ -21,7 +21,7 @@
 ## 快速开始
 
 1. 下载程序
-[轻传 By GIthub](https://github.com/Xingsandesu/QingQ-XMLPRC-Client/blob/main/QingQ.exe](https://github.com/Xingsandesu/QingQ-XMLRPC-Client/releases/)
+[Releases · Xingsandesu/QingQ-XMLRPC-Client](https://github.com/Xingsandesu/QingQ-XMLRPC-Client/releases/)
 [轻传 By KooKoo](https://download.kookoo.top/exe/QingQ.exe)
 
 2. 准备您的 Markdown 文档
