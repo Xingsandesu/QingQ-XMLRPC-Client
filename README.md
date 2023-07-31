@@ -8,20 +8,143 @@
 
 ## 功能列表
 
-| 功能            | 描述                                                              |
-| --------------- | ----------------------------------------------------------------- |
-| XML-RPC 发布    | 基于 metaWeblog API 实现的发布操作                                |
-| Markdown 渲染   | 基于 mistune 实现 Markdown 文件的本地 HTML 渲染                   |
-| 自适应配置检查  | 自写自纠错自生成逻辑实现 Config 的规范化调用                      |
-| 拖动上传        | 使用时自动获取 Markdown 文件的路径与文件名拖动即发布              |
-| TOC 生成支持    | 基于 mistune 实现支持文档自动生成 TOC                             |
-| YAML 头信息读取 | 自动读取 Markdown YAML 头信息，实现发布时自动归类与 OBsidian 归档 |
-| 报错抓取                | 自动抓取Traceback，并保存到error.txt                                                              |
+| 功能                                 | 描述                                                                                |
+| ------------------------------------ | ----------------------------------------------------------------------------------- |
+| XML-RPC 发布                         | 基于 metaWeblog API 实现的发布操作                                                  |
+| Markdown 渲染                        | 基于 mistune 实现 Markdown 文件的本地 HTML 渲染                                     |
+| 自适应配置检查                       | 自写自纠错自生成逻辑实现 Config 的规范化调用                                        |
+| 拖动上传                             | 使用时自动获取 Markdown 文件的路径与文件名拖动即发布，注意，该功能只支持到1.0       |
+| TOC 生成支持                         | 基于 mistune 实现支持文档自动生成 TOC                                               |
+| YAML 头信息读取                      | 自动读取 Markdown YAML 头信息，实现发布时自动归类，Typecho 打标签与 OBsidian 打标签 |
+| 报错抓取                             | 自动抓取Traceback，并保存到error.txt                                                |
+| WebDav服务端                         | 集成了一个WebDav服务端，现在可以直接和Obsidian中WebDav插件联动了                    |
+| 企业微信推送支持                     | 服务端部署可以直接推送消息到企业微信                                                |
+| 基于本地YAML的自动识别上传或修改文章 | 通过本地YAML文件来实现该功能，注意，此文件是隐藏的                                  |
+| 异步执行命令                                     | 集成了一个函数，二次开发可以直接调用                                                                                    |
 
 ## 快速开始
 
-1. 下载程序
+### 注意，此处可以运用到 1.0 之后的版本
+
+### 1. 下载程序
 [Releases · Xingsandesu/QingQ-XMLRPC-Client](https://github.com/Xingsandesu/QingQ-XMLRPC-Client/releases/)
+
+### 2. 准备您的 Markdown 文档
+
+### 3. 企业微信注册（仅 1.2 版本以后需要操作）
+
+1. 到企业微信官网，注册一个企业
+2. 登录企业微信后台，创建一个“自建”应用， 获取企业ID、agentid、secret这3个必要的参数
+3. 在企业微信的[通讯录](https://so.csdn.net/so/search?q=%E9%80%9A%E8%AE%AF%E5%BD%95&spm=1001.2101.3001.7020)中，创建多个测试账号
+4. 在手机端安装“企业微信”APP，使用测试账号登录到企业微信，准备接收消息。
+
+### 4. 准备一个服务器或者主机
+
+- 如果你没有服务器，我推荐使用1.1版本在本机实现一个Hook
+- 如果你拥有一个服务器，我推荐使用1.2版本在服务器上运行，通过WebDav更好的与Obsidian联动
+
+### 5. 第一次运行程序
+
+- 第一次运行程序会自动生成 config.yml 配置文件，并且报错，请不用担心，按照配置文件提示去填写他
+- 如果你失误填写了错误的配置文件或者格式，重新运行程序或者删除 config.yml ，程序会自动更正配置
+
+### 6.第二次运行程序
+
+- 如果你的配置没有问题，我想现在程序已经开始正常的运行了
+- 如果你想在命令行持久运行 在 Linux 上可以创建一个 screen 来运行他
+- 或者，见下方进阶配置，把程序注册为服务
+- 如果出现了提示报错，请按照提示检查并修改配置文件
+- 如果出现了未知错误，请提交 error.txt 到本项目的 issue，并写明复现方法，如果不可复现请直接提交txt内容
+
+### 7. 进阶配置 （可选）
+
+#### 反向代理 
+
+- 在1.2版本后，你可以使用Nginx等软件，反向代理该服务器
+- 这里提供一个简单的配置
+
+```
+location / {
+
+	proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+
+	proxy_set_header Host $http_host;
+
+	proxy_redirect off;
+
+	proxy_pass http://127.0.0.1:5212;
+
+	# 请将下一行注释符删除，并更改大小为理论最大文件尺寸
+
+	# client_max_body_size 20000m;
+
+}
+```
+
+
+#### 注册为服务，开机自启动
+
+##### Linux
+- 首先创建模板
+
+```
+# 编辑配置文件
+vim /usr/lib/systemd/system/qingq.service
+```
+
+- 将下文 `PATH_TO_QINGQ` 更换为程序所在目录：
+```
+[Unit]
+
+Description=QingQ
+
+Documentation=https://github.com/Xingsandesu/QingQ-XMLRPC-Client
+
+After=network.target
+
+Wants=network.target
+
+[Service]
+
+WorkingDirectory=/PATH_TO_QINGQ
+
+ExecStart=/PATH_TO_QINGQ/QingQ
+
+Restart=on-abnormal
+
+RestartSec=5s
+
+KillMode=mixed
+
+StandardOutput=null
+
+StandardError=syslog
+
+[Install]
+
+WantedBy=multi-user.target
+
+```
+
+- 配置命令
+
+```
+# 更新配置
+systemctl daemon-reload
+
+# 启动服务
+systemctl start qingq
+
+# 设置开机启动
+systemctl enable qingq
+```
+
+## 快速开始-1.0
+
+### 注意，1.0与此后更新的程序逻辑发生了极大的变更，1.0版本快速开始并不适用与其他版本
+
+1. 下载程序
+
 [轻传 By KooKoo](https://download.kookoo.top/exe/QingQ.exe)
 
 2. 准备您的 Markdown 文档
@@ -112,6 +235,35 @@ key: value
 #### 教程
 
 1. 下载我提供的[Template.md](https://github.com/Xingsandesu/QingQ-XMLPRC-Client/blob/main/Template.md)
+2. 参考`Template模板`来使用这个模板
+3. 写作
+4. 安装 第三方插件 Remotely Save 
+![image.png](https://cdn.jsdelivr.net/gh/Xingsandesu/kookoo-picbed/img/2023%2F07%2F31%2F20230731224333_22-43-34.png)
+5. 配置webdav地址与账号密码以及相关设置，账号密码为你的系统账号密码
+6. 创建一个保存草稿和发布的文件夹
+7. 创建一个文件夹来保存草稿
+8. 创建一个文件夹来保存发布
+9. 在config.yml填写File_dir为发布文件夹路径
+10. 在config.yml填写 Webdav_root_path为你的Obsidian库路径，
+> Windows系统 注意这里填C盘的地址，且不要写C:\  ，直接写去掉盘符的路径
+> Linux系统则没有限制
+11. 填写其他配置，详见快速开始
+12. 运行程序
+13. 写作完成后，只需把草稿中的markdown复制一份到发布文件夹中，运行同步操作或者等待插件完成自动同步，即可完成发布
+14. 如果想要修改，请在草稿文件夹修改文件，同样的复制一份到发布文件夹中，程序会自动生成新的文章覆盖更新。
+
+#### 注意事项
+
+- .slug_cid_mapping.yml 是完成上传后保存的一份特殊的log文件，他是隐藏的，以YAML格式储存，非必要请不要删除他，他记录了所有你使用程序上传的文章信息，根据这些信息才能判断文章是否已经存在，而完成文章发布或更新操作
+- print.log 是程序运行的log文件，该文件记录了所有控制台信息，遇到问题你可以查看该文件，注意，log含有重要的身份信息，请不要泄露他
+- config.yml 是程序的配置文件，程序需要的参数会在里面填写或更新，更新程序不会删除原有的配置，而是增量写入，每次更新时如果有配置更新，请填写相关配置
+- error.txt 是程序遇到未知错误而产生的文件，如果遇到自己解决不了的问题，请附带此文件到issue
+
+### 联动使用方法-1.0
+
+#### 教程
+
+1. 下载我提供的[Template.md](https://github.com/Xingsandesu/QingQ-XMLPRC-Client/blob/main/Template.md)
 ![image.png](https://cdn.jsdelivr.net/gh/Xingsandesu/kookoo-picbed/img/2023%2F07%2F30%2F20230730151803_15-18-05.png)
 
 2. 参考`Template模板`来使用这个模板
@@ -188,7 +340,10 @@ categories:
 ## TODO LIST
 
 - [x] hook 联动
-- [ ] Obsidian 插件联动
+- [x] Obsidian 联动
+- [x] 集成WebDav服务器
+
+> 如果有更好的想法，欢迎提交issue
 
 ## 更新日志
 
@@ -199,10 +354,28 @@ categories:
 - 更新了error.txt未知异常报错捕获逻辑
 - 提供Linux与Windows两种部署方式，获取请releases中下载
 
+
+### 1.2
+
+#### BUG FIX
+- 重写了文章上传逻辑，现在是基于本地文件.slug_cid_mapping.yml来实现自动识别更新文章或者上传新文章的逻辑，请不要删除这个文件
+- 重写了读取YAML头信息的读取方式，修复了之前有可能读取头文件不完全的BUG
+- 重写了加载逻辑
+- 优化了error.txt的判断点，现在代码更健壮了
+- 增加了企业微信应用id的可配置变量，现在可以在配置文件中修改它
+- 错别字修正
+
+#### 功能更新
+- 集成一个WebDav服务端，在服务器中部署它，或者在电脑中运行他，现在可以直接使用WebDav来配合Obsidian的webdav同步插件来实现无缝上传或者更新文章了
+- 支持了XMLRPC上传解析YAML头信息中标签信息，但是这里有一个已知 BUG 详见 typecho/typecho#1607
+- 增加异步执行的相关代码
+
+#### 重要公告
+- 如果想直接运行在本地运行.py程序，请务必安装requirements.txt中的相关依赖
+
 ## 相关依赖
 
 
 ```
 见 requirements.txt
 ```
-
