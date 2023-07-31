@@ -1,4 +1,8 @@
+cheroot==10.0.0
+lxml==4.9.3
 mistune==3.0.1
+PyYAML==6.0.1
 PyYAML==6.0.1
 Requests==2.31.0
 watchdog==3.0.0
+WsgiDAV==4.2.0
