@@ -72,7 +72,7 @@ location / {
 
 	proxy_redirect off;
 
-	proxy_pass http://127.0.0.1:5212;
+	proxy_pass http://127.0.0.1:8080;
 
 	# 请将下一行注释符删除，并更改大小为理论最大文件尺寸
 
