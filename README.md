@@ -22,8 +22,9 @@
 | 基于本地YAML的自动识别上传或修改文章 | 通过本地YAML文件来实现该功能，注意，此文件是隐藏的                                  |
 | 异步执行命令                                     | 集成了一个函数，二次开发可以直接调用                                                                                    |
 
+
 > 重要更新提示: 1.3 拆分了Hook Server 与 WebDav Server，现在程序是两部分，首先运行Hook Server 然后运行 WebDav Server 分别填写需要的配置
-> 最好自行安装python 然后通过
+> 最好自行安装python 然后通过requirements.txt安装依赖，手动使用python Server.py 和 python webdav.py 来运行两个程序
 
 ## 快速开始
 
