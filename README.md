@@ -22,6 +22,9 @@
 | 基于本地YAML的自动识别上传或修改文章 | 通过本地YAML文件来实现该功能，注意，此文件是隐藏的                                  |
 | 异步执行命令                                     | 集成了一个函数，二次开发可以直接调用                                                                                    |
 
+> 重要更新提示: 1.3 拆分了Hook Server 与 WebDav Server，现在程序是两部分，首先运行Hook Server 然后运行 WebDav Server 分别填写需要的配置
+> 最好自行安装python 然后通过
+
 ## 快速开始
 
 ### 注意，此处可以运用到 1.0 之后的版本
@@ -374,6 +377,22 @@ categories:
 - 如果想直接运行在本地运行.py程序，请务必安装requirements.txt中的相关依赖
 
 ## 相关依赖
+
+### 1.3
+
+#### 更新日志
+
+- 人生苦短，远离多线程
+
+####  BUG FIX
+- 修复了YAML头信息的获取逻辑
+- Template.md去掉了Typecho的标签字段，暂时去掉了对Typecho标签的支持，等待Typecho官方修复
+- 优化了error.txt抓取逻辑，增加了更多错误检测
+
+#### 功能更新
+- 重写了Webdav服务器启动方式，现在以cherrypy启动
+- 拆分了WebDav Server 与 Hook Server，现在他们都是以独立的脚本来运行（Pyinstaller多线程打包会有问题）
+- 去除了各自相应的逻辑代码
 
 
 ```
