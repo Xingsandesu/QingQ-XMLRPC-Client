@@ -374,11 +374,6 @@ categories:
 - 支持了XMLRPC上传解析YAML头信息中标签信息，但是这里有一个已知 BUG 详见 typecho/typecho#1607
 - 增加异步执行的相关代码
 
-#### 重要公告
-- 如果想直接运行在本地运行.py程序，请务必安装requirements.txt中的相关依赖
-
-## 相关依赖
-
 ### 1.3
 
 #### 更新日志
@@ -394,6 +389,13 @@ categories:
 - 重写了Webdav服务器启动方式，现在以cherrypy启动
 - 拆分了WebDav Server 与 Hook Server，现在他们都是以独立的脚本来运行（Pyinstaller多线程打包会有问题）
 - 去除了各自相应的逻辑代码
+
+#### 重要公告
+- 如果想直接运行在本地运行.py程序，请务必安装requirements.txt中的相关依赖
+
+## 相关依赖
+
+见requirements.txt
 
 
 ```
