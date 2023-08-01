@@ -7,9 +7,6 @@ Tags:
 categories:
 - Typecho分类
 
-mt_keywords:  # 此处有一个已知bug 详见 https://github.com/typecho/typecho/issues/1607
-  -标签1
-
 ---
 
 .. toc::
