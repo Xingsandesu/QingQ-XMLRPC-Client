@@ -20,8 +20,6 @@
 | WebDav服务端                         | 集成了一个WebDav服务端，现在可以直接和Obsidian中WebDav插件联动了                    |
 | 企业微信推送支持                     | 服务端部署可以直接推送消息到企业微信                                                |
 | 基于本地YAML的自动识别上传或修改文章 | 通过本地YAML文件来实现该功能，注意，此文件是隐藏的                                  |
-| 异步执行命令                                     | 集成了一个函数，二次开发可以直接调用                                                                                    |
-
 
 > 重要更新提示: 1.3 拆分了Hook Server 与 WebDav Server，现在程序是两部分，首先运行Hook Server 然后运行 WebDav Server 分别填写需要的配置
 > 最好自行安装python 然后通过requirements.txt安装依赖，手动使用python Server.py 和 python webdav.py 来运行两个程序
@@ -31,11 +29,13 @@
 ### 注意，此处可以运用到 1.0 之后的版本
 
 ### 1. 下载程序
-[Releases · Xingsandesu/QingQ-XMLRPC-Client](https://github.com/Xingsandesu/QingQ-XMLRPC-Client/releases/)
+[Releases · Xingsandesu/QingQ-XMLRPC-Client](https://github.com/Xingsandesu/QingQ-XMLRPC-Client)
+
+### 安装python  pip安装相应依赖
 
 ### 2. 准备您的 Markdown 文档
 
-### 3. 企业微信注册（仅 1.2 版本以后需要操作）
+### 3. 企业微信注册
 
 1. 到企业微信官网，注册一个企业
 2. 登录企业微信后台，创建一个“自建”应用， 获取企业ID、agentid、secret这3个必要的参数
@@ -44,11 +44,13 @@
 
 ### 4. 准备一个服务器或者主机
 
-- 如果你没有服务器，我推荐使用1.1版本在本机实现一个Hook
-- 如果你拥有一个服务器，我推荐使用1.2版本在服务器上运行，通过WebDav更好的与Obsidian联动
+- 如果你拥有一个Linux服务器，我推荐使用screen来运行脚本
 
 ### 5. 第一次运行程序
-
+```
+python Server.py
+python webdav.py
+```
 - 第一次运行程序会自动生成 config.yml 配置文件，并且报错，请不用担心，按照配置文件提示去填写他
 - 如果你失误填写了错误的配置文件或者格式，重新运行程序或者删除 config.yml ，程序会自动更正配置
 
@@ -56,7 +58,21 @@
 
 - 如果你的配置没有问题，我想现在程序已经开始正常的运行了
 - 如果你想在命令行持久运行 在 Linux 上可以创建一个 screen 来运行他
-- 或者，见下方进阶配置，把程序注册为服务
+```
+screen -S webdav
+cd <你的程序运行目录>
+python webdav.py
+按:Ctrl+a, 再按:d, 即可退出这个screen
+
+screen -S hook
+cd <你的程序运行目录>
+python Server.py
+按:Ctrl+a, 再按:d, 即可退出这个screen
+
+后续管理窗口
+screen -r webdav
+screen -r hook
+```
 - 如果出现了提示报错，请按照提示检查并修改配置文件
 - 如果出现了未知错误，请提交 error.txt 到本项目的 issue，并写明复现方法，如果不可复现请直接提交txt内容
 
@@ -85,63 +101,6 @@ location / {
 }
 ```
 
-
-#### 注册为服务，开机自启动
-
-##### Linux
-- 首先创建模板
-
-```
-# 编辑配置文件
-vim /usr/lib/systemd/system/qingq.service
-```
-
-- 将下文 `PATH_TO_QINGQ` 更换为程序所在目录：
-```
-[Unit]
-
-Description=QingQ
-
-Documentation=https://github.com/Xingsandesu/QingQ-XMLRPC-Client
-
-After=network.target
-
-Wants=network.target
-
-[Service]
-
-WorkingDirectory=/PATH_TO_QINGQ
-
-ExecStart=/PATH_TO_QINGQ/QingQ
-
-Restart=on-abnormal
-
-RestartSec=5s
-
-KillMode=mixed
-
-StandardOutput=null
-
-StandardError=syslog
-
-[Install]
-
-WantedBy=multi-user.target
-
-```
-
-- 配置命令
-
-```
-# 更新配置
-systemctl daemon-reload
-
-# 启动服务
-systemctl start qingq
-
-# 设置开机启动
-systemctl enable qingq
-```
 
 ## 快速开始-1.0
 
@@ -249,12 +208,16 @@ key: value
 8. 创建一个文件夹来保存发布
 9. 在config.yml填写File_dir为发布文件夹路径
 10. 在config.yml填写 Webdav_root_path为你的Obsidian库路径，
-> Windows系统 注意这里填C盘的地址，且不要写C:\  ，直接写去掉盘符的路径
-> Linux系统则没有限制
 11. 填写其他配置，详见快速开始
 12. 运行程序
-13. 写作完成后，只需把草稿中的markdown复制一份到发布文件夹中，运行同步操作或者等待插件完成自动同步，即可完成发布
-14. 如果想要修改，请在草稿文件夹修改文件，同样的复制一份到发布文件夹中，程序会自动生成新的文章覆盖更新。
+13. 安装 第三方插件 Shell commands
+14. 选择powershell运行，复制并修改这段代码上去，可选创建快捷键与别名
+```
+Copy-Item -Path "你的草稿文件夹绝对路径{{file_name}}" -Destination "你的Typecho Push API文件夹绝对路径"; Start-Sleep -Seconds 61; Remove-Item -Path "你的Typecho Push API文件夹绝对路径{{file_name}}"
+```
+> 使用这个命令自动copy并删除，可以保存快捷键，写完文章后，使用快捷键，配合remotely save每分钟自动保存，实现自动上传自动清理
+16. 写作完成后，只需把运行这个命令，手动运行同步操作或者等待插件完成自动同步，即可完成发布
+17. 如果想要修改，修改文件后运行这个命令，手动运行同步操作或者等待插件完成自动同步，即可完成修改
 
 #### 注意事项
 
@@ -394,9 +357,6 @@ categories:
 - 如果想直接运行在本地运行.py程序，请务必安装requirements.txt中的相关依赖
 
 ## 相关依赖
-
-见requirements.txt
-
 
 ```
 见 requirements.txt
