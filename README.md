@@ -213,7 +213,7 @@ key: value
 13. 安装 第三方插件 Shell commands
 14. 选择powershell运行，复制并修改这段代码上去，可选创建快捷键与别名
 ```
-Copy-Item -Path "你的草稿文件夹绝对路径{{file_name}}" -Destination "你的Typecho Push API文件夹绝对路径"; Start-Sleep -Seconds 61; Remove-Item -Path "你的Typecho Push API文件夹绝对路径{{file_name}}"
+Copy-Item -Path "你的草稿文件夹绝对路径\{{file_name}}" -Destination "你的Typecho Push API文件夹绝对路径"; Start-Sleep -Seconds 61; Remove-Item -Path "你的Typecho Push API文件夹绝对路径\{{file_name}}"
 ```
 > 使用这个命令自动copy并删除，可以保存快捷键，写完文章后，使用快捷键，配合remotely save每分钟自动保存，实现自动上传自动清理
 16. 写作完成后，只需把运行这个命令，手动运行同步操作或者等待插件完成自动同步，即可完成发布
@@ -225,6 +225,7 @@ Copy-Item -Path "你的草稿文件夹绝对路径{{file_name}}" -Destination "�
 - print.log 是程序运行的log文件，该文件记录了所有控制台信息，遇到问题你可以查看该文件，注意，log含有重要的身份信息，请不要泄露他
 - config.yml 是程序的配置文件，程序需要的参数会在里面填写或更新，更新程序不会删除原有的配置，而是增量写入，每次更新时如果有配置更新，请填写相关配置
 - error.txt 是程序遇到未知错误而产生的文件，如果遇到自己解决不了的问题，请附带此文件到issue
+- 配置文件填写路径时，如果遇到报错，请使用 \\ 代替 \
 
 ### 联动使用方法-1.0
 
